@@ -32,17 +32,9 @@ $ docker-compose build
 $ docker-compose up -d
 ```
 
-## Composer install
-
-```
-$ docker-compose exec app bash
-$ composer install
-```
-
 ## src/.env作成 & 編集
 
 ```
-$ exit
 $ cd src
 $ cp .env.example .env
 ```
@@ -56,6 +48,15 @@ DB_DATABASE={.envのDATABASE_NAME}
 DB_USERNAME={.envのUSER_NAME}
 DB_PASSWORD={.envのPASSWORD}
 ```
+
+## Composer install
+
+```
+$ cd ..
+$ docker-compose exec app bash
+$ composer install
+```
+
 ## APP_KEY作成
 
 ```
