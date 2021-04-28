@@ -1,8 +1,8 @@
 FROM php:7.4.1-fpm
 
 # php.ini、xdebug.iniをコピー
-COPY php.ini /usr/local/etc/php/php.ini
-COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
+COPY ./docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Composer install
 COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
