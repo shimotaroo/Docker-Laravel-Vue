@@ -1,3 +1,13 @@
+# Laravel + Vue.js（JavaScript）のDocker環境構築
+
+## version
+
+- Laravel : 6.x
+- Vue.js : 2.6.12
+
+## attention
+
+- M1 Mac未対応
 ## clone
 
 ```
@@ -6,65 +16,76 @@ $ cd docker-laravel-vue
 ```
 ## .env作成
 
-```
-$ touch .env
-```
-
-以下の通り追記
-```
-DATABASE_NAME=データベース名
-USER_NAME=ユーザー名
-PASSWORD=パスワード名
-ROOT_PASSWORD=パスワード（rootユーザー用）
-DATABASE_NAME_TEST=データベース名（テスト用）
-USER_NAME_TEST=ユーザー名（テスト用）
-PASSWORD_TEST=パスワード名（テスト用）
-```
-## Docker Image をBuild
+- `.env.example`をコピーして`.env`を作成して各項目に値を定義する。
+- `docker-compose config`で`.env`に設定した環境変数が`docker-compose.yml`にセットされているか確認する。
+## Build & Up
 
 ```
-$ docker-compose build
+$ docker-compose up -d --build
 ```
 
-## Docker Container をUp
+## コンテナ起動状態を確認
 
 ```
-$ docker-compose up -d
+$ docker-compose ps
 ```
 
-## src/.env作成 & 編集
+3つのコンテナが`Up`になっていたら正常に起動している。
+
+## src/.env作成
 
 ```
 $ cd src
 $ cp .env.example .env
 ```
 
-編集する箇所
-```
-DB_CONNECTION=mysql
-DB_HOST=db
-DB_PORT=3306
-DB_DATABASE={.envのDATABASE_NAME}
-DB_USERNAME={.envのUSER_NAME}
-DB_PASSWORD={.envのPASSWORD}
-```
+## Package Install
 
-## Composer install
+appコンテナに入る
 
 ```
-$ cd ..
 $ docker-compose exec app bash
-$ composer install
 ```
 
-## APP_KEY作成
+以降は全てappコンテナ内で実行
 
 ```
-$ php artisan key:generate
+composer install
+php artisan key:generate
+npm install
 ```
-## Docker Container をDown
+
+## browerSync起動
+
+appコンテナ内で実行
 
 ```
+npm run watch
+```
+
+※`docker-compose.yml`の以下の記載が無いとエラーになる
+
+```yml
+    ports:
+      - ${APP_PORT}:3000
+
+```
+
+## Docker Compose Command
+
+```
+イメージをビルド
+$ docker-compose build
+
+コンテナ起動
+$ docker-compose up -d
+
+イメージをビルド＋コンテナ起動
+$ docker-compose up -d --build
+
+コンテナ終了（削除）
 $ docker-compose down
-```
 
+コンテナ再起動
+$ docker-compose restart
+```
